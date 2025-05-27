@@ -44,6 +44,12 @@ function(build_dependency lib_name)
   # anything after lib_name(${ARGN}) are assumed to be arguments passed over to
   # library building cmake.
   set(build_args ${ARGN})
+  message(STATUS "******************************")
+  message(STATUS "******************************")
+  message(STATUS "Building dependency: ${lib_name}")
+  message(STATUS "buildArg: ${build_args}")
+  message(STATUS "******************************")
+  message(STATUS "******************************")
 
   file(REMOVE_RECURSE ${OPEN_SRC_INSTALL_PREFIX}/lib${lib_name})
 

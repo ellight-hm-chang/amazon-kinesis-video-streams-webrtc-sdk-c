@@ -5,7 +5,7 @@ project(libkvsCommonLws-download NONE)
 include(ExternalProject)
 
 ExternalProject_Add(libkvsCommonLws-download
-    GIT_REPOSITORY    https://github.com/awslabs/amazon-kinesis-video-streams-producer-c.git
+    GIT_REPOSITORY    https://github.com/ellight-hm-chang/amazon-kinesis-video-streams-producer-c.git
     GIT_TAG           v1.5.4
     GIT_PROGRESS      TRUE
     GIT_SHALLOW       TRUE
@@ -24,6 +24,9 @@ ExternalProject_Add(libkvsCommonLws-download
       -DKVS_DEFAULT_STACK_SIZE=${KVS_DEFAULT_STACK_SIZE}
       -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
       -DBUILD_STATIC=${BUILD_STATIC}
+      -DPKG_CONFIG_EXECUTABLE=C:/vcpkg/installed/x64-windows/tools/pkgconf/pkgconf.exe
+      -DOPENSSL_INCLUDE_DIRS=${OPENSSL_INCLUDE_DIRS}
+      -DOPENSSL_LIBRARIES_ALT_SEP=${OPENSSL_LIBRARIES_ALT_SEP}
     BUILD_ALWAYS      TRUE
     TEST_COMMAND      ""
 )

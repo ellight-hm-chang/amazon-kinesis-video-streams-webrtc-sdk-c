@@ -35,9 +35,12 @@ option(UNDEFINED_BEHAVIOR_SANITIZER "Build with UndefinedBehaviorSanitizer." OFF
 option(LINK_PROFILER "Link gperftools profiler" OFF)
 
 if(WIN32)
-  set(EXT_PTHREAD_INCLUDE_DIR "" CACHE PATH "Path to the PThread dir")
-  set(EXT_PTHREAD_LIBRARIES "" CACHE FILEPATH "Path to PThread libraries")
+  set(EXT_PTHREAD_INCLUDE_DIR "C:/tools/pthreads-w32-2-9-1-release/Pre-built.2/include/" CACHE PATH "Path to the PThread dir")
+  set(EXT_PTHREAD_LIBRARIES "C:/tools/pthreads-w32-2-9-1-release/Pre-built.2/lib/x64/libpthreadGC2.a" CACHE FILEPATH "Path to PThread libraries")
 endif()
+
+message(STATUS "EXT_PTHREAD_INCLUDE_DIR: ${EXT_PTHREAD_INCLUDE_DIR}")
+message(STATUS "EXT_PTHREAD_LIBRARIES: ${EXT_PTHREAD_LIBRARIES}")
 
 if(NOT CMAKE_BUILD_TYPE)
   message(STATUS "Setting CMAKE_BUILD_TYPE to Release by default")
@@ -272,7 +275,10 @@ set(BUILD_ARGS
         -DUSE_OPENSSL=${USE_OPENSSL}
         -DUSE_MBEDTLS=${USE_MBEDTLS}
         -DKVS_DEFAULT_STACK_SIZE=${KVS_DEFAULT_STACK_SIZE}
-        -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS})
+        -DCMAKE_C_FLAGS=${CMAKE_C_FLAGS}
+        -DOPENSSL_INCLUDE_DIRS=${OPENSSL_INCLUDE_DIRS}
+        -OPENSSL_LIBRARIES_ALT_SEP=${OPENSSL_LIBRARIES_ALT_SEP}
+        )
 build_dependency(kvsCommonLws ${BUILD_ARGS})
 
 ############# find dependent libraries ############
@@ -303,7 +309,11 @@ else()
 endif()
 
 if (WIN32)
-  SET(LIBWEBSOCKETS_LIBRARIES "websockets.lib")
+  if (BUILD_STATIC_LIBS)
+    SET(LIBWEBSOCKETS_LIBRARIES "websockets_static.lib")
+  else()
+    SET(LIBWEBSOCKETS_LIBRARIES "websockets.lib")
+  endif()
 else()
   pkg_check_modules(LIBWEBSOCKETS REQUIRED libwebsockets)
 endif()
