@@ -7,8 +7,10 @@ param(
     [string]$toolchainFile = "C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
 )
 
-$installPrefix = Join-Path $installPath "webrtc"
-$kvspcDir = Join-Path $installPath "producer"
+$installPrefixDebug = Join-Path $installPath "Debug/webrtc"
+$installPrefixRelease = Join-Path $installPath "Release/webrtc"
+$kvspcDirDebug = Join-Path $installPath "Debug/producer"
+$kvspcDirRelease = Join-Path $installPath "Release/producer"
 $buildDir = "build"
 
 $env:VCPKG_DEFAULT_TRIPLET = $vcpkgTriplet
@@ -21,14 +23,23 @@ if (-not (Test-Path $buildDir)) {
 Push-Location $buildDir
 
 cmake -G "Visual Studio 17 2022" `
-    -DBUILD_TEST=TRUE `
-    -DCMAKE_BUILD_TYPE=Release `
+    -DBUILD_TEST=FALSE `
     -DENABLE_AWS_SDK_IN_TESTS=OFF `
     -DCMAKE_TOOLCHAIN_FILE="$toolchainFile" `
-    -DCMAKE_INSTALL_PREFIX="$installPrefix" `
-    -DKVSPC_DIR="$kvspcDir" `
+    -DCMAKE_INSTALL_PREFIX="$installPrefixRelease" `
+    -DKVSPC_DIR="$kvspcDirRelease" `
     ..
 
 cmake --build . --config Release --target install
+
+cmake -G "Visual Studio 17 2022" `
+    -DBUILD_TEST=FALSE `
+    -DENABLE_AWS_SDK_IN_TESTS=OFF `
+    -DCMAKE_TOOLCHAIN_FILE="$toolchainFile" `
+    -DCMAKE_INSTALL_PREFIX="$installPrefixDebug" `
+    -DKVSPC_DIR="$kvspcDirDebug" `
+    ..
+
+cmake --build . --config Debug --target install
 
 Pop-Location
