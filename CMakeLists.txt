@@ -351,7 +351,12 @@ target_link_libraries(
          ${MBEDTLS_LIBRARIES})
 
 if (WIN32)
-  target_link_libraries(kvsWebrtcClient PRIVATE "Ws2_32" "iphlpapi")
+  target_link_libraries(
+    kvsWebrtcClient 
+    PRIVATE 
+      "Ws2_32" 
+      "iphlpapi"
+      )
 endif()
 
 if(COMPILER_WARNINGS)
